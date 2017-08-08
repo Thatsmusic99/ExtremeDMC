@@ -1,0 +1,41 @@
+# ExtremeDMC plugin for Discord by Thatsmusic99 (Error)
+
+# Bot token
+# To create the bot token, go to https://discordapp.com/developers/applications/me and click on your desired app.
+# If you don't already have an app, create one and create a bot user.
+# Under "APP BOT USER", go to "Token" and "Click to reveal". Copy and paste the provided token.
+bot-token: INSERT-BOT-TOKEN
+
+# Invite to your server
+# Make sure the invite is valid, or players won't be able to join your server.
+discord-invite: INSERT-VALID-INVITE
+
+# Message transfer
+# Decides if messages will be transferred between Discord and Minecraft. If false, text-channel will not apply.
+message-transfer: true
+
+# Text Channel bot is to send messages to
+# Enter the name of the text channel. Make sure other channels don't have the same name and the name is exact, or you won't receive messages.
+text-channel: INSERT-TEXT-CHANNEL
+
+# Message sent to text channel if message-transfer is true
+message-format: '[%w] %p %u > %m'
+
+# Message sent from text channel if message-transfer is true
+d-message-format: '&f[&3&oDiscord&f] %u &7> &b%m'
+
+# Online status
+# Valid inputs: ONLINE, IDLE, DO NOT DISTURB, INVISIBLE
+online-status: ONLINE
+
+# Playing status
+# Insert a game the bot will set as its "Playing ..." status.
+playing-status: Minecraft
+
+# Command prefix (Discord)
+# The command prefix the bot for the plugin will use.
+prefix: '&'
+
+# Text channel for staff chat
+# If you don't want one, leave it blank.
+staff-channel: INSERT-TEXT-CHANNEL
