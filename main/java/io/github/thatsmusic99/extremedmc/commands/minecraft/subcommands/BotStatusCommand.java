@@ -14,6 +14,7 @@ public class BotStatusCommand {
                 + ChatColor.DARK_AQUA + "===============");
         cs.sendMessage(ChatColor.DARK_AQUA + "Bot name: " + ChatColor.AQUA + ExtremeDMC.jda.getSelfUser().getName());
         cs.sendMessage(ChatColor.DARK_AQUA + "Bot ID: " + ChatColor.AQUA + ExtremeDMC.jda.getSelfUser().getId());
-
+        cs.sendMessage(ChatColor.DARK_AQUA + "Guild: " + ChatColor.AQUA + ExtremeDMC.jda.getGuilds().get(0).getName() + " (" + ExtremeDMC.jda.getGuilds().get(0).getId() + ")");
+        cs.sendMessage(ChatColor.DARK_AQUA + "Status: " + ChatColor.AQUA + ExtremeDMC.jda.getPresence().getStatus().getKey());
     }
 }
