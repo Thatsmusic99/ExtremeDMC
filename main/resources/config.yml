@@ -1,13 +1,14 @@
-# ExtremeDMC plugin for Discord by Thatsmusic99 (Error)
+# ExtremeDMC plugin for Discord and Minecraft by Thatsmusic99 (Error)
 
 # Bot token
 # To create the bot token, go to https://discordapp.com/developers/applications/me and click on your desired app.
 # If you don't already have an app, create one and create a bot user.
 # Under "APP BOT USER", go to "Token" and "Click to reveal". Copy and paste the provided token.
-bot-token: INSERT-BOT-TOKEN
+bot-token: 'INSERT-BOT-TOKEN'
 
 # Invite to your server
 # Make sure the invite is valid, or players won't be able to join your server.
+# If you don't want to use this command, just leave the value as it is.
 discord-invite: INSERT-VALID-INVITE
 
 # Message transfer

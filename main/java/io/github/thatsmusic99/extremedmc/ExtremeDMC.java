@@ -3,8 +3,8 @@ package io.github.thatsmusic99.extremedmc;
 import com.google.common.io.ByteStreams;
 
 import io.github.thatsmusic99.extremedmc.listeners.AsyncPlayerChatEvent;
-
 import io.github.thatsmusic99.extremedmc.listeners.DiscordMessageEvent;
+
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -14,15 +14,15 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
-
 import net.milkbowl.vault.permission.Permission;
-import org.bukkit.Bukkit;
+
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.security.auth.login.LoginException;
+
 import java.io.*;
 import java.util.logging.Logger;
 
@@ -31,6 +31,7 @@ public class ExtremeDMC extends JavaPlugin {
     public static JDA jda;
     public static YamlConfiguration config;
     public static YamlConfiguration data;
+    public static YamlConfiguration messages;
     public Logger log = getLogger();
     public static Chat chat = null;
     private static Economy econ = null;
@@ -71,6 +72,7 @@ public class ExtremeDMC extends JavaPlugin {
     private void createConfig() throws IOException {
         config = YamlConfiguration.loadConfiguration(loadResource(this, "config.yml"));
         data = YamlConfiguration.loadConfiguration(loadResource(this, "data.yml"));
+        messages = YamlConfiguration.loadConfiguration(loadResource(this, "messages.yml"));
     }
     private static File loadResource(Plugin plugin, String resource) {
         File folder = plugin.getDataFolder();
