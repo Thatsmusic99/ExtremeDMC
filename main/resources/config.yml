@@ -26,11 +26,12 @@ message-format: '[%w] %p %u > %m'
 d-message-format: '&f[&3&oDiscord&f] %u &7> &b%m'
 
 # Online status
-# Valid inputs: ONLINE, IDLE, DO NOT DISTURB, INVISIBLE
+# Valid inputs: ONLINE, IDLE, DO_NOT_DISTURB, INVISIBLE
 online-status: ONLINE
 
 # Playing status
 # Insert a game the bot will set as its "Playing ..." status.
+# However be aware this only works with Java 8.
 playing-status: Minecraft
 
 # Command prefix (Discord)

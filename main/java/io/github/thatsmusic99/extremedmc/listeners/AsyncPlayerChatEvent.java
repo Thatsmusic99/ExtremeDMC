@@ -32,7 +32,7 @@ public class AsyncPlayerChatEvent implements Listener {
         if (msg.contains("§l")) t = true;
         int s = msg.indexOf("§l");
 
-        msg = msg.replaceFirst("§l", "**"); // **&nHi
+        msg = msg.replaceFirst("§l", "**");
         for (ChatColor c : ChatColor.values()) {
             if (c.isColor()) {
                 while (msg.contains("§" + c.getChar())) {

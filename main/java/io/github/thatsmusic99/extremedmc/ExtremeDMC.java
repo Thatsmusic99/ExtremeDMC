@@ -2,9 +2,11 @@ package io.github.thatsmusic99.extremedmc;
 
 import com.google.common.io.ByteStreams;
 
+import io.github.thatsmusic99.extremedmc.commands.minecraft.MainCommand;
 import io.github.thatsmusic99.extremedmc.listeners.AsyncPlayerChatEvent;
 import io.github.thatsmusic99.extremedmc.listeners.DiscordMessageEvent;
 
+import io.github.thatsmusic99.extremedmc.listeners.ReactionListener;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -48,10 +50,13 @@ public class ExtremeDMC extends JavaPlugin {
             createConfig();
             jda = new JDABuilder(AccountType.BOT).setToken(config.getString("bot-token"))
                     .addEventListener(new DiscordMessageEvent())
+                    .addEventListener(new ReactionListener())
                     .buildAsync();
             log.info("ExtremeDMC has successfully logged into a bot account!");
             jda.getPresence().setStatus(OnlineStatus.valueOf(config.getString("online-status")));
+
             this.getServer().getPluginManager().registerEvents(new AsyncPlayerChatEvent(), this);
+            getCommand("edmc").setExecutor(new MainCommand());
             if (System.getProperty("java.version").contains("1.8")) {
                 try {
                     jda.getPresence().setGame(Game.of(config.getString("playing-status")));
@@ -69,12 +74,14 @@ public class ExtremeDMC extends JavaPlugin {
         }
 
     }
+
+
     private void createConfig() throws IOException {
         config = YamlConfiguration.loadConfiguration(loadResource(this, "config.yml"));
         data = YamlConfiguration.loadConfiguration(loadResource(this, "data.yml"));
         messages = YamlConfiguration.loadConfiguration(loadResource(this, "messages.yml"));
     }
-    private static File loadResource(Plugin plugin, String resource) {
+    static File loadResource(Plugin plugin, String resource) {
         File folder = plugin.getDataFolder();
         if (!folder.exists())
             folder.mkdir();

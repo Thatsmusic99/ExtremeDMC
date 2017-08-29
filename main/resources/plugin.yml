@@ -2,3 +2,12 @@ main: io.github.thatsmusic99.extremedmc.ExtremeDMC
 name: ExtremeDMC
 author: Thatsmusic99
 version: 1.0.0-SNAPSHOT
+commands:
+  edmc:
+    description: Main EDMC command
+    permission: edmc.command
+    default: true
+  discord:
+    description: Gives the Discord invite.
+    permission: edmc.invite
+    default: true
