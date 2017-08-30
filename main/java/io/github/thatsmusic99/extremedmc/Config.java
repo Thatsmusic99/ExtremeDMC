@@ -47,7 +47,12 @@ public class Config {
         }
         return false;
     }
-    public static viud
+    public static void reloadConfig() {
+        if (configF == null) {
+            configF = new File(ExtremeDMC.instance.getDataFolder(), "config.yml");
+        }
+        ExtremeDMC.config = YamlConfiguration.loadConfiguration(configF);
+    }
     public static void reloadData() {
         if (dataF == null) {
             dataF = new File(ExtremeDMC.instance.getDataFolder(), "data.yml");

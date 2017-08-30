@@ -1,6 +1,7 @@
 package io.github.thatsmusic99.extremedmc.commands.minecraft;
 
 import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.LinkCommand;
+import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.ReloadCommand;
 import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.WhoIsCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,14 +27,21 @@ public class MainCommand implements CommandExecutor {
                     }
                 }
                 if (args[0].equalsIgnoreCase("whois")) {
-                    if (args.length == 1) {
+                    if (cs.hasPermission("edmc.command.whois")) {
+                        if (args.length == 1) {
 
-                    }
-                    if (args.length == 2) {
+                        }
+                        if (args.length == 2) {
 
+                        }
+                        if (args.length == 3) {
+                            WhoIsCommand.whois(args, cs);
+                        }
                     }
-                    if (args.length == 3) {
-                        WhoIsCommand.whois(args, cs);
+                }
+                if (args[0].equalsIgnoreCase("reload")) {
+                    if (cs.hasPermission("edmc.command.reload")) {
+                        ReloadCommand.reload((Player) cs);
                     }
                 }
             }

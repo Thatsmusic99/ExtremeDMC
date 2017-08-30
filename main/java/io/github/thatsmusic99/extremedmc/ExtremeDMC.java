@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 public class ExtremeDMC extends JavaPlugin {
 
-    public static JDA jda;
+    public static JDA jda = null;
     public static YamlConfiguration config;
     public static YamlConfiguration data;
     public static YamlConfiguration messages;
