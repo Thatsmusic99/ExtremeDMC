@@ -2,6 +2,7 @@ package io.github.thatsmusic99.extremedmc;
 
 import com.google.common.io.ByteStreams;
 
+import io.github.thatsmusic99.extremedmc.commands.discord.CommandManager;
 import io.github.thatsmusic99.extremedmc.commands.minecraft.MainCommand;
 import io.github.thatsmusic99.extremedmc.listeners.AsyncPlayerChatEvent;
 import io.github.thatsmusic99.extremedmc.listeners.DiscordMessageEvent;
@@ -37,7 +38,7 @@ public class ExtremeDMC extends JavaPlugin {
     public Logger log = getLogger();
     public static Chat chat = null;
     private static Economy econ = null;
-    private static Permission perms = null;
+    public static Permission perms = null;
     public static ExtremeDMC instance;
 
     @Override
@@ -51,6 +52,7 @@ public class ExtremeDMC extends JavaPlugin {
             jda = new JDABuilder(AccountType.BOT).setToken(config.getString("bot-token"))
                     .addEventListener(new DiscordMessageEvent())
                     .addEventListener(new ReactionListener())
+                    .addEventListener(new CommandManager())
                     .buildAsync();
             log.info("ExtremeDMC has successfully logged into a bot account!");
             jda.getPresence().setStatus(OnlineStatus.valueOf(config.getString("online-status")));
