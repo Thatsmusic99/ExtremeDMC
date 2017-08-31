@@ -17,8 +17,14 @@ public class CommandManager extends ListenerAdapter {
                     if (msg[0].equalsIgnoreCase(ExtremeDMC.config.getString("prefix") + "list")) {
                         e.getChannel().sendMessage(ListCommand.list()).queue();
                     }
+                    if (msg[0].equalsIgnoreCase(ExtremeDMC.config.getString("prefix") + "whois")) {
+                        if (msg.length > 2) {
+
+                        }
+                    }
                 }
             }
         }
     }
+
 }

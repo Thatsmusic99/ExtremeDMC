@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.extremedmc.commands.minecraft;
 
+import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.BotStatusCommand;
 import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.LinkCommand;
 import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.ReloadCommand;
 import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.WhoIsCommand;
@@ -42,6 +43,11 @@ public class MainCommand implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (cs.hasPermission("edmc.command.reload")) {
                         ReloadCommand.reload((Player) cs);
+                    }
+                }
+                if (args[0].equalsIgnoreCase("status")) {
+                    if (cs.hasPermission("edmc.command.status")) {
+                        BotStatusCommand.botStatus(cs);
                     }
                 }
             }
