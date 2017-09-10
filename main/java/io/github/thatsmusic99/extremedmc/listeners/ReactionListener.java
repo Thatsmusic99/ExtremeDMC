@@ -16,10 +16,12 @@ public class ReactionListener extends ListenerAdapter {
                 if (e.getReaction().getEmote().getName().equals("\u2705")) {
                     if (LinkCommand.pu.containsKey(e.getUser())) {
                         e.getUser().openPrivateChannel().complete().sendMessage("**Great!** We're linking your accounts now. Thank you!").queue();
-                        ExtremeDMC.instance.getServer().getLogger().info(LinkCommand.pu.get(e.getUser()).getName());
-                        ExtremeDMC.instance.getServer().getLogger().info(e.getUser().getName());
                         Config.create(LinkCommand.pu.get(e.getUser()), e.getUser());
                         LinkCommand.pu.remove(e.getUser());
+                    }
+                } else if (e.getReaction().getEmote().getName().equals("\u274E")) {
+                    if (LinkCommand.pu.containsKey(e.getUser())) {
+                        e.getUser().openPrivateChannel().complete().sendMessage("**Oops, may have been the wrong account.** Apologies for bothering!").queue();
                     }
                 }
             }

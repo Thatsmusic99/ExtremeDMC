@@ -22,6 +22,11 @@ public class CommandManager extends ListenerAdapter {
 
                         }
                     }
+                    if (msg[0].equalsIgnoreCase(ExtremeDMC.config.getString("prefix") + "link")) {
+                        if (msg.length > 1) {
+
+                        }
+                    }
                 }
             }
         }

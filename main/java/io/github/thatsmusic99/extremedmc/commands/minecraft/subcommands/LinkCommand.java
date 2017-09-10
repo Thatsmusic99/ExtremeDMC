@@ -29,11 +29,11 @@ public class LinkCommand {
                                         + ChatColor.BOLD
                                         + "Multiple names were found when searching by name, please click one of the following:");
                                 for (User u : ExtremeDMC.jda.getUsersByName(name, true)) {
-                                    FancyMessage fm = new FancyMessage()
+                                    new FancyMessage()
                                             .color(ChatColor.AQUA)
                                             .text(u.getName() + "#" + u.getDiscriminator())
-                                            .command("/edmc link " + u.getId());
-                                    p.sendMessage(fm.toJSONString());
+                                            .command("/edmc link " + u.getId())
+                                            .send(p);
                                 }
                             }
                         } else {
@@ -52,6 +52,31 @@ public class LinkCommand {
                     }
                 } else {
                     p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "No players were found by that name!" + ChatColor.AQUA + " Make sure you use your Discord name, not your nickname!");
+                }
+            } else {
+                User u = Config.getDiscord(p);
+                p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Your account is already linked!" + ChatColor.AQUA + " Currently linked to: " + u.getName() + "#" + u.getDiscriminator() + " (" + u.getId() + ")");
+            }
+        }
+    }
+    public static void linkSelfID(Player p, String id) {
+        if (p.hasPermission("edmc.command.link")) {
+            if (!Config.hasDiscord(p)) {
+                if (ExtremeDMC.jda.getUserById(id) != null) {
+                    if (!Config.isPlayer(ExtremeDMC.jda.getUserById(id))) {
+                        p.sendMessage(ChatColor.AQUA + "We've sent you a private message! " + ChatColor.DARK_AQUA + "Click the reaction on the private message we sent.");
+                        User u = ExtremeDMC.jda.getUserById(id);
+                        p.sendMessage(ChatColor.AQUA + "Wrong account? Do /edmc cancel. Message sent to: " + u.getName() + "#" + u.getDiscriminator() + " (" + u.getId() + ")");
+                        pu.put(u, p);
+                        PrivateChannel pc = u.openPrivateChannel().complete();
+                        Message m = pc.sendMessage("**Hi there!** If you were linking this account to your MC player account (" + p.getName() + "), we've made it!" +
+                                "\nTo continue, please click one of the reactions added: the tick means you say that this is your account, the cross means it's not." +
+                                "\nRemember if you misclick, you won't be able to send a second request to your account; you can only send your player account a request.").complete();
+                        m.addReaction("\u2705").queue();
+                        m.addReaction("\u274E").queue();
+                    }
+                } else {
+                    p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "No players were found by that ID!" + ChatColor.AQUA + " Make sure you've copied the right ID!");
                 }
             } else {
                 User u = Config.getDiscord(p);
