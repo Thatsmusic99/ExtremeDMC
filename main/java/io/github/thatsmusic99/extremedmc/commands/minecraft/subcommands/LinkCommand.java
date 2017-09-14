@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class LinkCommand {
 
     public static HashMap<User, Player> pu = new HashMap<>();
+    public static HashMap<User, Player> up = new HashMap<>();
 
     public static void linkSelfName(Player p, String name) {
         if (p.hasPermission("edmc.command.link")) {
@@ -64,8 +65,14 @@ public class LinkCommand {
             if (!Config.hasDiscord(p)) {
                 if (ExtremeDMC.jda.getUserById(id) != null) {
                     if (!Config.isPlayer(ExtremeDMC.jda.getUserById(id))) {
-                        p.sendMessage(ChatColor.AQUA + "We've sent you a private message! " + ChatColor.DARK_AQUA + "Click the reaction on the private message we sent.");
+
                         User u = ExtremeDMC.jda.getUserById(id);
+                        if (up.containsKey(u)) {
+                            if (up.get(u).equals(p)) {
+                                p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "You've already sent a request to ");
+                            }
+                        }
+                        p.sendMessage(ChatColor.AQUA + "We've sent you a private message! " + ChatColor.DARK_AQUA + "Click the reaction on the private message we sent.");
                         p.sendMessage(ChatColor.AQUA + "Wrong account? Do /edmc cancel. Message sent to: " + u.getName() + "#" + u.getDiscriminator() + " (" + u.getId() + ")");
                         pu.put(u, p);
                         PrivateChannel pc = u.openPrivateChannel().complete();
