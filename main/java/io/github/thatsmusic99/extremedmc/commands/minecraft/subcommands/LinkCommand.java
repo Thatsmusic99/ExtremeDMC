@@ -38,6 +38,14 @@ public class LinkCommand {
                                 }
                             }
                         } else {
+                            if (LinkCommand.up.containsValue(p)) {
+                                for (User u : LinkCommand.up.keySet()) {
+                                    if (LinkCommand.up.get(u).equals(p)) {
+                                        p.sendMessage(ChatColor.DARK_AQUA + "You've already attempted to link your account! Try linking your account via your Discord account.");
+                                        return;
+                                    }
+                                }
+                            }
                             p.sendMessage(ChatColor.AQUA + "We've found your account! " + ChatColor.DARK_AQUA + "Click the reaction on the private message we sent.");
                             User u = ExtremeDMC.jda.getUsersByName(name, true).get(0);
                             p.sendMessage(ChatColor.AQUA + "Wrong account? Do /edmc cancel. Message sent to: " + u.getName() + "#" + u.getDiscriminator() + " (" + u.getId() + ")");
@@ -65,13 +73,15 @@ public class LinkCommand {
             if (!Config.hasDiscord(p)) {
                 if (ExtremeDMC.jda.getUserById(id) != null) {
                     if (!Config.isPlayer(ExtremeDMC.jda.getUserById(id))) {
-
-                        User u = ExtremeDMC.jda.getUserById(id);
-                        if (up.containsKey(u)) {
-                            if (up.get(u).equals(p)) {
-                                p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "You've already sent a request to ");
+                        if (LinkCommand.up.containsValue(p)) {
+                            for (User u : LinkCommand.up.keySet()) {
+                                if (LinkCommand.up.get(u).equals(p)) {
+                                    p.sendMessage(ChatColor.DARK_AQUA + "You've already attempted to link your account! Try linking your account via your Discord account.");
+                                    return;
+                                }
                             }
                         }
+                        User u = ExtremeDMC.jda.getUserById(id);
                         p.sendMessage(ChatColor.AQUA + "We've sent you a private message! " + ChatColor.DARK_AQUA + "Click the reaction on the private message we sent.");
                         p.sendMessage(ChatColor.AQUA + "Wrong account? Do /edmc cancel. Message sent to: " + u.getName() + "#" + u.getDiscriminator() + " (" + u.getId() + ")");
                         pu.put(u, p);

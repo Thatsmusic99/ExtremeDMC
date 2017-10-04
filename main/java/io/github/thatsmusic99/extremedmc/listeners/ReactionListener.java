@@ -22,6 +22,8 @@ public class ReactionListener extends ListenerAdapter {
                 } else if (e.getReaction().getEmote().getName().equals("\u274E")) {
                     if (LinkCommand.pu.containsKey(e.getUser())) {
                         e.getUser().openPrivateChannel().complete().sendMessage("**Oops, may have been the wrong account.** Apologies for bothering!").queue();
+                        LinkCommand.up.putIfAbsent(e.getUser(), LinkCommand.pu.get(e.getUser()));
+                        LinkCommand.pu.remove(e.getUser());
                     }
                 }
             }
