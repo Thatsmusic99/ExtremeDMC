@@ -46,7 +46,6 @@ public class ReloadCommand {
                     }
                 } else {
                     ExtremeDMC.instance.log.warning("Java 8 not detected, cannot set playing status!");
-
                 }
             }
             p.sendMessage(ChatColor.AQUA + "Config has been reloaded!");

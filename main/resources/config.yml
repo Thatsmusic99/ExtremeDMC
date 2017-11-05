@@ -9,7 +9,7 @@ bot-token: 'INSERT-BOT-TOKEN'
 # Invite to your server
 # Make sure the invite is valid, or players won't be able to join your server.
 # If you don't want to use this command, just leave the value as it is.
-discord-invite: INSERT-VALID-INVITE
+discord-invite: 'INSERT-VALID-INVITE'
 
 # Message transfer
 # Decides if messages will be transferred between Discord and Minecraft. If false, text-channel will not apply.
@@ -41,3 +41,12 @@ prefix: '&'
 # Text channel for staff chat
 # If you don't want one, leave it blank.
 staff-channel: INSERT-TEXT-CHANNEL
+
+# Nickname setter
+# Sets whether a Discord account should have their user nicknamed as their Minecraft IGN.
+# NOTE: This will not work with users a higher hierarchy than the bot.
+change-nickname: true
+
+# Verify accounts
+# If users join the Discord, they will have to link their account IG to gain access to the whole Discord server.
+verify: false

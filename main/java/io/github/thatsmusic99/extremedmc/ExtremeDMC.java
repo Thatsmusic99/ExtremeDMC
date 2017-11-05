@@ -19,10 +19,14 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import javax.security.auth.login.LoginException;
 
@@ -49,16 +53,29 @@ public class ExtremeDMC extends JavaPlugin {
             setupPermissions();
             setupChat();
             createConfig();
-            jda = new JDABuilder(AccountType.BOT).setToken(config.getString("bot-token"))
-                    .addEventListener(new DiscordMessageEvent())
-                    .addEventListener(new ReactionListener())
-                    .addEventListener(new CommandManager())
-                    .buildAsync();
-            log.info("ExtremeDMC has successfully logged into a bot account!");
-            jda.getPresence().setStatus(OnlineStatus.valueOf(config.getString("online-status")));
-
             this.getServer().getPluginManager().registerEvents(new AsyncPlayerChatEvent(), this);
             getCommand("edmc").setExecutor(new MainCommand());
+            log.info("ExtremeDMC has successfully set itself up, logging into bot account once the server is set up!");
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    try {
+                        jda = new JDABuilder(AccountType.BOT).setToken(config.getString("bot-token"))
+                                .addEventListener(new DiscordMessageEvent())
+                                .addEventListener(new ReactionListener())
+                                .addEventListener(new CommandManager())
+                                .buildAsync();
+                    } catch (LoginException e) {
+                        log.severe("ExtremeDMC couldn't login into a bot account. Make sure the token you've inserted is correct!");
+                    } catch (RateLimitedException e) {
+                        e.printStackTrace();
+                    }
+                    log.info("ExtremeDMC has successfully logged into a bot account!");
+                }
+            }.runTaskAsynchronously(this);
+            jda.getPresence().setStatus(OnlineStatus.valueOf(config.getString("online-status")));
+
+
             if (System.getProperty("java.version").contains("1.8")) {
                 try {
                     jda.getPresence().setGame(Game.of(config.getString("playing-status")));
@@ -69,9 +86,7 @@ public class ExtremeDMC extends JavaPlugin {
                 log.warning("Java 8 not detected, cannot set playing status!");
 
             }
-        } catch (LoginException ex) {
-            log.severe("ExtremeDMC couldn't login into a bot account. Make sure the token you've inserted is correct!");
-        } catch (RateLimitedException | IOException ex) {
+        } catch (IOException ex) {
             ex.printStackTrace();
         }
 
@@ -132,5 +147,18 @@ public class ExtremeDMC extends JavaPlugin {
         }
         econ = rsp.getProvider();
         return econ != null;
+    }
+    public static Player getPlayer(String name) {
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                return p;
+            }
+        }
+        for (OfflinePlayer p : Bukkit.getOfflinePlayers()) {
+            if (p.getName().equalsIgnoreCase(name)) {
+                return (Player) p;
+            }
+        }
+        return null;
     }
 }
