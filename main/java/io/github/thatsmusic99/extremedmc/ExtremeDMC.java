@@ -45,8 +45,6 @@ public class ExtremeDMC extends JavaPlugin {
     public static Permission perms = null;
     public static ExtremeDMC instance;
 
-    // Ping
-
     @Override
     public void onEnable() {
         try {
