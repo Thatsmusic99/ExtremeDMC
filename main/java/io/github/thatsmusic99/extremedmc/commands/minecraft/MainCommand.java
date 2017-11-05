@@ -46,7 +46,7 @@ public class MainCommand implements CommandExecutor {
                 }
                 if (args[0].equalsIgnoreCase("reload")) {
                     if (cs.hasPermission("edmc.command.reload")) {
-                        ReloadCommand.reload((Player) cs);
+                        ReloadCommand.reload(cs);
                     }
                 }
                 if (args[0].equalsIgnoreCase("status")) {

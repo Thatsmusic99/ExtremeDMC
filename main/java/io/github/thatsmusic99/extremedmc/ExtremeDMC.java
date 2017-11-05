@@ -67,25 +67,29 @@ public class ExtremeDMC extends JavaPlugin {
                                 .buildAsync();
                     } catch (LoginException e) {
                         log.severe("ExtremeDMC couldn't login into a bot account. Make sure the token you've inserted is correct!");
+                        return;
                     } catch (RateLimitedException e) {
                         e.printStackTrace();
+                        return;
                     }
                     log.info("ExtremeDMC has successfully logged into a bot account!");
+
+                    jda.getPresence().setStatus(OnlineStatus.valueOf(config.getString("online-status")));
+
+
+                    if (System.getProperty("java.version").contains("1.8")) {
+                        try {
+                            jda.getPresence().setGame(Game.of(config.getString("playing-status")));
+                        } catch (Exception e) {
+                            // Nothing, just in case of mismatch
+                        }
+                    } else {
+                        log.warning("Java 8 not detected, cannot set playing status!");
+
+                    }
                 }
             }.runTaskAsynchronously(this);
-            jda.getPresence().setStatus(OnlineStatus.valueOf(config.getString("online-status")));
 
-
-            if (System.getProperty("java.version").contains("1.8")) {
-                try {
-                    jda.getPresence().setGame(Game.of(config.getString("playing-status")));
-                } catch (Exception e) {
-                    // Nothing, just in case of mismatch
-                }
-            } else {
-                log.warning("Java 8 not detected, cannot set playing status!");
-
-            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }

@@ -39,12 +39,17 @@ public class Config {
         saveData();
     }
     public static boolean isPlayer(User u) {
-        for (String s : ExtremeDMC.data.getConfigurationSection("data").getKeys(true)) {
-            ConfigurationSection cs = ExtremeDMC.data.getConfigurationSection("data").getConfigurationSection(s);
-            if (cs.getString("discordid").equals(u.getId())) {
-                return true;
+        try {
+            for (String s : ExtremeDMC.data.getConfigurationSection("data").getKeys(true)) {
+                ConfigurationSection cs = ExtremeDMC.data.getConfigurationSection("data").getConfigurationSection(s);
+                if (cs.getString("discordid").equals(u.getId())) {
+                    return true;
+                }
             }
+        } catch (NullPointerException ex) {
+            return false;
         }
+
         return false;
     }
     public static void reloadConfig() {

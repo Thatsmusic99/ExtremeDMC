@@ -12,13 +12,14 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.security.auth.login.LoginException;
 
 public class ReloadCommand {
 
-    public static void reload(Player p) {
+    public static void reload(CommandSender p) {
         try {
             Config.reloadConfig();
             if (ExtremeDMC.jda == null || !ExtremeDMC.jda.getToken().equals(ExtremeDMC.config.getString("bot-token"))) {
