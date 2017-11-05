@@ -13,7 +13,6 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import javax.security.auth.login.LoginException;
 
