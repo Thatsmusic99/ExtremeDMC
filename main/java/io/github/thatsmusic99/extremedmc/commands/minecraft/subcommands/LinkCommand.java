@@ -2,7 +2,9 @@ package io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands;
 
 import io.github.thatsmusic99.extremedmc.Config;
 import io.github.thatsmusic99.extremedmc.ExtremeDMC;
+import io.github.thatsmusic99.extremedmc.utils.PagedLists;
 import mkremins.fanciful.FancyMessage;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.User;
@@ -10,6 +12,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 
 public class LinkCommand {
 
@@ -20,21 +24,28 @@ public class LinkCommand {
         if (p.hasPermission("edmc.command.link")) {
             if (!Config.hasDiscord(p)) {
                 if (ExtremeDMC.jda.getUsersByName(name, true).size() > 0) {
-                    if (!Config.isPlayer(ExtremeDMC.jda.getUsersByName(name, true).get(0))) {
-                        if (ExtremeDMC.jda.getUsersByName(name, true).size() > 1) {
-                            if (ExtremeDMC.jda.getUsersByName(name, true).size() > 8) {
+                    if (!Config.isPlayer(ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).get(0).getUser())) {
+                        if (ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).size() > 1) {
+                            if (ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).size() > 8) {
+                                PagedLists pl = new PagedLists(ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true), 8);
+                                List<Member> u = (List<Member>) pl.getContentsInPage(1);
 
                             } else {
                                 p.sendMessage(ChatColor.DARK_AQUA
                                         + ""
                                         + ChatColor.BOLD
                                         + "Multiple names were found when searching by name, please click one of the following:");
-                                for (User u : ExtremeDMC.jda.getUsersByName(name, true)) {
-                                    new FancyMessage()
+                                for (Member u : ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true)) {
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.append(u.getUser().getName()).append("#").append(u.getUser().getDiscriminator());
+                                    if (!Objects.equals(u.getEffectiveName(), u.getUser().getName())) {
+                                        sb.append("(").append(u.getNickname()).append(")");
+                                    }
+                                    FancyMessage fc = new FancyMessage()
                                             .color(ChatColor.AQUA)
-                                            .text(u.getName() + "#" + u.getDiscriminator())
-                                            .command("/edmc link " + u.getId())
-                                            .send(p);
+                                            .text(sb.toString())
+                                            .command("/edmc link " + u.getUser().getId());
+                                    fc.send(p);
                                 }
                             }
                         } else {
@@ -60,7 +71,7 @@ public class LinkCommand {
                         }
                     }
                 } else {
-                    p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "No players were found by that name!" + ChatColor.AQUA + " Make sure you use your Discord name, not your nickname!");
+                    p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "No players were found by that name!");
                 }
             } else {
                 User u = Config.getDiscord(p);

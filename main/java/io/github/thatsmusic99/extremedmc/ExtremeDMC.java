@@ -13,6 +13,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import net.milkbowl.vault.chat.Chat;
@@ -44,6 +45,7 @@ public class ExtremeDMC extends JavaPlugin {
     private static Economy econ = null;
     public static Permission perms = null;
     public static ExtremeDMC instance;
+    public Guild mainGuild = null;
 
     @Override
     public void onEnable() {
@@ -55,6 +57,7 @@ public class ExtremeDMC extends JavaPlugin {
             createConfig();
             this.getServer().getPluginManager().registerEvents(new AsyncPlayerChatEvent(), this);
             getCommand("edmc").setExecutor(new MainCommand());
+
             log.info("ExtremeDMC has successfully set itself up, logging into bot account once the server is set up!");
             new BukkitRunnable() {
                 @Override
@@ -75,6 +78,7 @@ public class ExtremeDMC extends JavaPlugin {
                     log.info("ExtremeDMC has successfully logged into a bot account!");
 
                     jda.getPresence().setStatus(OnlineStatus.valueOf(config.getString("online-status")));
+                    mainGuild = jda.getGuilds().get(0);
 
 
                     if (System.getProperty("java.version").contains("1.8")) {

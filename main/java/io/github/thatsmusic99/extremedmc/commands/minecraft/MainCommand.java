@@ -19,40 +19,40 @@ public class MainCommand implements CommandExecutor {
                     if (cs.hasPermission("edmc.command.help")) {
 
                     }
-                }
-                if (args[0].equalsIgnoreCase("link")) {
-                    if (args.length == 1) {
+                } else {
+                    switch (args[0].toLowerCase()) {
+                        case "link":
+                            if (args.length == 1) {
 
-                    } else if (args.length == 2) {
-                        if (args[1].matches("^[0-9]+$")) {
-                            LinkCommand.linkSelfID((Player) cs, args[1]);
-                        } else {
-                            LinkCommand.linkSelfName((Player) cs, args[1]);
-                        }
-                    }
-                }
-                if (args[0].equalsIgnoreCase("whois")) {
-                    if (cs.hasPermission("edmc.command.whois")) {
-                        if (args.length == 1) {
+                            } else if (args.length == 2) {
+                                if (args[1].matches("^[0-9]+$")) {
+                                    LinkCommand.linkSelfID((Player) cs, args[1]);
+                                } else {
+                                    LinkCommand.linkSelfName((Player) cs, args[1]);
+                                }
+                            }
+                        case "whois":
+                            if (cs.hasPermission("edmc.command.whois")) {
+                                if (args.length == 1) {
 
-                        }
-                        if (args.length == 2) {
+                                }
+                                if (args.length == 2) {
 
-                        }
-                        if (args.length == 3) {
-                            WhoIsCommand.whois(args, cs);
-                        }
+                                }
+                                if (args.length == 3) {
+                                    WhoIsCommand.whois(args, cs);
+                                }
+                            }
+                        case "reload":
+                            if (cs.hasPermission("edmc.command.reload")) {
+                               ReloadCommand.reload(cs);
+                            }
+                        case "status":
+                            if (cs.hasPermission("edmc.command.status")) {
+                                BotStatusCommand.botStatus(cs);
+                            }
                     }
-                }
-                if (args[0].equalsIgnoreCase("reload")) {
-                    if (cs.hasPermission("edmc.command.reload")) {
-                        ReloadCommand.reload(cs);
-                    }
-                }
-                if (args[0].equalsIgnoreCase("status")) {
-                    if (cs.hasPermission("edmc.command.status")) {
-                        BotStatusCommand.botStatus(cs);
-                    }
+
                 }
             }
         }
