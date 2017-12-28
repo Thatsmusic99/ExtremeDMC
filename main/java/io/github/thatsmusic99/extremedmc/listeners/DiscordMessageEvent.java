@@ -16,12 +16,13 @@ public class DiscordMessageEvent extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
         // if not valid command
+
             if (e.getChannel().getName().equalsIgnoreCase(config.getString("text-channel"))) {
                 if (e.getAuthor() != ExtremeDMC.jda.getSelfUser()) {
                     for (Player p : ExtremeDMC.instance.getServer().getOnlinePlayers()) {
                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', ExtremeDMC.config.getString("d-message-format")
                                 .replaceAll("%u", e.getAuthor().getName())
-                                .replaceAll("%m", format(e.getMessage().getContent()))));
+                                .replaceAll("%m", format(e.getMessage().getContentDisplay()))));
                     }
                 }
             }

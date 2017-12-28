@@ -40,7 +40,7 @@ public class ReloadCommand {
                 ExtremeDMC.jda.getPresence().setStatus(OnlineStatus.valueOf(ExtremeDMC.config.getString("online-status")));
                 if (System.getProperty("java.version").contains("1.8")) {
                     try {
-                        ExtremeDMC.jda.getPresence().setGame(Game.of(ExtremeDMC.config.getString("playing-status")));
+                        ExtremeDMC.jda.getPresence().setGame(Game.of(Game.GameType.valueOf(ExtremeDMC.config.getString("gametype")), ExtremeDMC.config.getString("playing-status")));
                     } catch (Exception e) {
                         // Nothing, just in case of mismatch
                     }

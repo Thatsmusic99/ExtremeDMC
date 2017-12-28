@@ -27,8 +27,10 @@ public class MainCommand implements CommandExecutor {
                             } else if (args.length == 2) {
                                 if (args[1].matches("^[0-9]+$")) {
                                     LinkCommand.linkSelfID((Player) cs, args[1]);
+                                    return true;
                                 } else {
                                     LinkCommand.linkSelfName((Player) cs, args[1]);
+                                    return true;
                                 }
                             }
                         case "whois":
@@ -41,15 +43,18 @@ public class MainCommand implements CommandExecutor {
                                 }
                                 if (args.length == 3) {
                                     WhoIsCommand.whois(args, cs);
+                                    return true;
                                 }
                             }
                         case "reload":
                             if (cs.hasPermission("edmc.command.reload")) {
                                ReloadCommand.reload(cs);
+                               return true;
                             }
                         case "status":
                             if (cs.hasPermission("edmc.command.status")) {
                                 BotStatusCommand.botStatus(cs);
+                                return true;
                             }
                     }
 

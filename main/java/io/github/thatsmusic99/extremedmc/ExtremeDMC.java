@@ -7,6 +7,7 @@ import io.github.thatsmusic99.extremedmc.commands.minecraft.MainCommand;
 import io.github.thatsmusic99.extremedmc.listeners.AsyncPlayerChatEvent;
 import io.github.thatsmusic99.extremedmc.listeners.DiscordMessageEvent;
 
+import io.github.thatsmusic99.extremedmc.listeners.FullStartupEvent;
 import io.github.thatsmusic99.extremedmc.listeners.ReactionListener;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -67,6 +68,7 @@ public class ExtremeDMC extends JavaPlugin {
                                 .addEventListener(new DiscordMessageEvent())
                                 .addEventListener(new ReactionListener())
                                 .addEventListener(new CommandManager())
+                                .addEventListener(new FullStartupEvent())
                                 .buildAsync();
                     } catch (LoginException e) {
                         log.severe("ExtremeDMC couldn't login into a bot account. Make sure the token you've inserted is correct!");
@@ -78,12 +80,12 @@ public class ExtremeDMC extends JavaPlugin {
                     log.info("ExtremeDMC has successfully logged into a bot account!");
 
                     jda.getPresence().setStatus(OnlineStatus.valueOf(config.getString("online-status")));
-                    mainGuild = jda.getGuilds().get(0);
+
 
 
                     if (System.getProperty("java.version").contains("1.8")) {
                         try {
-                            jda.getPresence().setGame(Game.of(config.getString("playing-status")));
+                            jda.getPresence().setGame(Game.of(Game.GameType.valueOf(config.getString("gametype")), config.getString("playing-status")));
                         } catch (Exception e) {
                             // Nothing, just in case of mismatch
                         }
@@ -91,6 +93,7 @@ public class ExtremeDMC extends JavaPlugin {
                         log.warning("Java 8 not detected, cannot set playing status!");
 
                     }
+
                 }
             }.runTaskAsynchronously(this);
 
@@ -126,7 +129,11 @@ public class ExtremeDMC extends JavaPlugin {
     }
     @Override
     public void onDisable() {
-        jda.shutdownNow();
+        try {
+            jda.shutdownNow();
+        } catch (NullPointerException ex) {
+            //
+        }
     }
 
     private boolean setupChat() {
@@ -168,5 +175,13 @@ public class ExtremeDMC extends JavaPlugin {
             }
         }
         return null;
+    }
+
+    public void setupMainGuild() {
+        try {
+            this.mainGuild = jda.getGuilds().get(0);
+        } catch (IndexOutOfBoundsException ex) {
+            log.warning("No main guild able to be detected! Please make sure your bot is in a guild!");
+        }
     }
 }

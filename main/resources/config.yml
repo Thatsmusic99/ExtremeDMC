@@ -50,3 +50,8 @@ change-nickname: true
 # Verify accounts
 # If users join the Discord, they will have to link their account IG to gain access to the whole Discord server.
 verify: false
+
+# Game type
+# This will choose what Game type the bot will be set to when its playing status is set.
+# Valid values: DEFAULT, LISTENING, STREAMING, WATCHING
+gametype: DEFAULT
