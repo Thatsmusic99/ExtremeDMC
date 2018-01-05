@@ -55,3 +55,8 @@ verify: false
 # This will choose what Game type the bot will be set to when its playing status is set.
 # Valid values: DEFAULT, LISTENING, STREAMING, WATCHING
 gametype: DEFAULT
+
+# Joining and leaving messages
+# When a user joins the Discord server, it will broadcast a message in game.
+# This does not apply from Minecraft joins to broadcasting on Discord.
+join-leave: true

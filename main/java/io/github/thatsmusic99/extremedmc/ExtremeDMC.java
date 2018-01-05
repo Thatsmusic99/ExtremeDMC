@@ -3,12 +3,10 @@ package io.github.thatsmusic99.extremedmc;
 import com.google.common.io.ByteStreams;
 
 import io.github.thatsmusic99.extremedmc.commands.discord.CommandManager;
+import io.github.thatsmusic99.extremedmc.commands.minecraft.DiscordCommand;
 import io.github.thatsmusic99.extremedmc.commands.minecraft.MainCommand;
-import io.github.thatsmusic99.extremedmc.listeners.AsyncPlayerChatEvent;
-import io.github.thatsmusic99.extremedmc.listeners.DiscordMessageEvent;
+import io.github.thatsmusic99.extremedmc.listeners.*;
 
-import io.github.thatsmusic99.extremedmc.listeners.FullStartupEvent;
-import io.github.thatsmusic99.extremedmc.listeners.ReactionListener;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -47,6 +45,7 @@ public class ExtremeDMC extends JavaPlugin {
     public static Permission perms = null;
     public static ExtremeDMC instance;
     public Guild mainGuild = null;
+    public static Metrics m;
 
     @Override
     public void onEnable() {
@@ -57,7 +56,11 @@ public class ExtremeDMC extends JavaPlugin {
             setupChat();
             createConfig();
             this.getServer().getPluginManager().registerEvents(new AsyncPlayerChatEvent(), this);
+            this.getServer().getPluginManager().registerEvents(new JoinLeaveEvents(), this);
             getCommand("edmc").setExecutor(new MainCommand());
+            getCommand("discord").setExecutor(new DiscordCommand());
+            m = new Metrics(this);
+
 
             log.info("ExtremeDMC has successfully set itself up, logging into bot account once the server is set up!");
             new BukkitRunnable() {
@@ -69,6 +72,7 @@ public class ExtremeDMC extends JavaPlugin {
                                 .addEventListener(new ReactionListener())
                                 .addEventListener(new CommandManager())
                                 .addEventListener(new FullStartupEvent())
+                                .addEventListener(new JoinLeaveEvents())
                                 .buildAsync();
                     } catch (LoginException e) {
                         log.severe("ExtremeDMC couldn't login into a bot account. Make sure the token you've inserted is correct!");
@@ -180,6 +184,10 @@ public class ExtremeDMC extends JavaPlugin {
     public void setupMainGuild() {
         try {
             this.mainGuild = jda.getGuilds().get(0);
+            m.addCustomChart(new Metrics.SingleLineChart("users_managed", () -> jda.getUsers().size()));
+            m.addCustomChart(new Metrics.SingleLineChart("tcs_managed", () -> jda.getTextChannels().size()));
+            m.addCustomChart(new Metrics.SingleLineChart("roles_managed", () -> jda.getRoles().size()));
+            m.addCustomChart(new Metrics.SingleLineChart("accounts_linked", () -> data.getConfigurationSection("data").getKeys(false).size()));
         } catch (IndexOutOfBoundsException ex) {
             log.warning("No main guild able to be detected! Please make sure your bot is in a guild!");
         }

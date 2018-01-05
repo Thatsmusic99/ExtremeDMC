@@ -3,6 +3,7 @@ package io.github.thatsmusic99.extremedmc.listeners;
 import io.github.thatsmusic99.extremedmc.ExtremeDMC;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import static io.github.thatsmusic99.extremedmc.ExtremeDMC.config;
@@ -12,7 +13,7 @@ public class AsyncPlayerChatEvent implements Listener {
     private static boolean bold = false;
     private static boolean strike = false;
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerChat(org.bukkit.event.player.AsyncPlayerChatEvent e) {
         String m = e.getMessage();
         m = format(m);

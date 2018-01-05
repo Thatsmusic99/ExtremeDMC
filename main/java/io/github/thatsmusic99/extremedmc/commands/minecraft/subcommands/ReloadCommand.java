@@ -21,6 +21,7 @@ public class ReloadCommand {
     public static void reload(CommandSender p) {
         try {
             Config.reloadConfig();
+            Config.reloadData();
             if (ExtremeDMC.jda == null || !ExtremeDMC.jda.getToken().equals(ExtremeDMC.config.getString("bot-token"))) {
                 try {
                     ExtremeDMC.jda = null;

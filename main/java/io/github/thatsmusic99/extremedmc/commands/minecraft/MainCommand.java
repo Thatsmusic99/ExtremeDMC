@@ -1,9 +1,7 @@
 package io.github.thatsmusic99.extremedmc.commands.minecraft;
 
-import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.BotStatusCommand;
-import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.LinkCommand;
-import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.ReloadCommand;
-import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.WhoIsCommand;
+import io.github.thatsmusic99.extremedmc.ExtremeDMC;
+import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -17,7 +15,8 @@ public class MainCommand implements CommandExecutor {
             if (cs.hasPermission("edmc.command")) {
                 if (args.length == 0) {
                     if (cs.hasPermission("edmc.command.help")) {
-
+                        HelpCommand.helpNoArgs(cs);
+                        return true;
                     }
                 } else {
                     switch (args[0].toLowerCase()) {
@@ -56,8 +55,29 @@ public class MainCommand implements CommandExecutor {
                                 BotStatusCommand.botStatus(cs);
                                 return true;
                             }
-                    }
+                        case "help":
+                            if (cs.hasPermission("edmc.command.help")) {
+                                if (args.length > 1) {
 
+                                } else {
+                                    HelpCommand.helpNoArgs(cs);
+                                    return true;
+                                }
+                            }
+                        case "approve":
+                            if (cs.hasPermission("edmc.command.approve")) {
+                                if (args.length > 1) {
+                                    if (args[1].matches("^[0-9]+$")) {
+                                        if (ExtremeDMC.jda.getUserById(args[1]) != null) {
+                                            if (cs instanceof Player) {
+                                                ApproveCommand.approve((Player) cs, ExtremeDMC.jda.getUserById(args[1]));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                    }
                 }
             }
         }

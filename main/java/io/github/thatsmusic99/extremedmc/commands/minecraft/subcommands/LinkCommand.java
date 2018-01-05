@@ -12,7 +12,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public class LinkCommand {
@@ -23,12 +22,25 @@ public class LinkCommand {
     public static void linkSelfName(Player p, String name) {
         if (p.hasPermission("edmc.command.link")) {
             if (!Config.hasDiscord(p)) {
-                if (ExtremeDMC.jda.getUsersByName(name, true).size() > 0) {
+                if (ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).size() > 0) {
                     if (!Config.isPlayer(ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).get(0).getUser())) {
                         if (ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).size() > 1) {
                             if (ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).size() > 8) {
                                 PagedLists pl = new PagedLists(ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true), 8);
-                                List<Member> u = (List<Member>) pl.getContentsInPage(1);
+                                PageSwitch.sections.put(p, "playerlink");
+                                for (Object o : pl.getContentsInPage(1)) {
+                                    Member u = (Member) o;
+                                    StringBuilder sb = new StringBuilder();
+                                    sb.append(u.getUser().getName()).append("#").append(u.getUser().getDiscriminator());
+                                    if (!Objects.equals(u.getEffectiveName(), u.getUser().getName())) {
+                                        sb.append("(").append(u.getNickname()).append(")");
+                                    }
+                                    FancyMessage fc = new FancyMessage()
+                                            .color(ChatColor.AQUA)
+                                            .text(sb.toString())
+                                            .command("/edmc link " + u.getUser().getId());
+                                    fc.send(p);
+                                }
 
                             } else {
                                 p.sendMessage(ChatColor.DARK_AQUA
@@ -99,9 +111,16 @@ public class LinkCommand {
                         PrivateChannel pc = u.openPrivateChannel().complete();
                         Message m = pc.sendMessage("**Hi there!** If you were linking this account to your MC player account (" + p.getName() + "), we've made it!" +
                                 "\nTo continue, please click one of the reactions added: the tick means you say that this is your account, the cross means it's not." +
-                                "\nRemember if you misclick, you won't be able to send a second request to your account; you can only send your player account a request.").complete();
+                                "\nRemember if you misclick, you won't be able to send a second request to your account; you can only send your player account a request." +
+                                "\nThe request will automatically expire after 2 minutes.").complete();
                         m.addReaction("\u2705").queue();
                         m.addReaction("\u274E").queue();
+                        javax.swing.Timer timer = new javax.swing.Timer(120000, arg0 -> {
+                            if (io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.LinkCommand.pu.containsKey(u)) {
+                                io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.LinkCommand.up.put(u, p);
+                                io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.LinkCommand.pu.remove(u);
+                            }
+                        });
                     }
                 } else {
                     p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "No players were found by that ID!" + ChatColor.AQUA + " Make sure you've copied the right ID!");

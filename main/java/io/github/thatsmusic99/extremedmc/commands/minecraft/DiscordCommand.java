@@ -11,10 +11,10 @@ public class DiscordCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender cs, Command c, String s, String[] args) {
-        if (cs.hasPermission("edmc.discord")) {
+        if (cs.hasPermission("edmc.invite")) {
             if (cs instanceof Player) {
                 if (!ExtremeDMC.config.getString("discord-invite").equals("INSERT-VALID-INVITE")) {
-                    cs.sendMessage(ExtremeDMC.messages.getString("invite").replaceAll("%url%", ExtremeDMC.config.getString("discord-invite")));
+                    cs.sendMessage(ChatColor.translateAlternateColorCodes('&', ExtremeDMC.messages.getString("invite").replaceAll("%url%", ExtremeDMC.config.getString("discord-invite"))));
                 } else {
                     cs.sendMessage(ChatColor.AQUA + "There is no invite set up for the Discord server!");
                 }

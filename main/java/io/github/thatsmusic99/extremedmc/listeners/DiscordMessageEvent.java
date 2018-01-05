@@ -21,7 +21,7 @@ public class DiscordMessageEvent extends ListenerAdapter {
                 if (e.getAuthor() != ExtremeDMC.jda.getSelfUser()) {
                     for (Player p : ExtremeDMC.instance.getServer().getOnlinePlayers()) {
                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', ExtremeDMC.config.getString("d-message-format")
-                                .replaceAll("%u", e.getAuthor().getName())
+                                .replaceAll("%u", e.getMember().getEffectiveName())
                                 .replaceAll("%m", format(e.getMessage().getContentDisplay()))));
                     }
                 }
