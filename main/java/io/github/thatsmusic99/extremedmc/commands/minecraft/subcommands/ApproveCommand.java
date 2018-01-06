@@ -22,6 +22,11 @@ public class ApproveCommand {
                         ExtremeDMC.instance.getLogger().log(java.util.logging.Level.SEVERE, "Failed to change the nickname of " + ExtremeDMC.instance.mainGuild.getMember(u) + " to " + p.getName() + "! Please provide the bot with the permission " + ex.getPermission().getName() + "!");
                     }
                 }
+                if (ExtremeDMC.instance.getConfig().getBoolean("verify")) {
+                    if (ExtremeDMC.instance.mainGuild.getMember(u).getRoles().contains(ExtremeDMC.instance.getVerifyRole())) {
+                        ExtremeDMC.instance.mainGuild.getController().removeRolesFromMember(ExtremeDMC.instance.mainGuild.getMember(u), ExtremeDMC.instance.getVerifyRole()).queue();
+                    }
+                }
             }
         }
     }

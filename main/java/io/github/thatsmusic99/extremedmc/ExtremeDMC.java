@@ -13,6 +13,8 @@ import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Role;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import net.milkbowl.vault.chat.Chat;
@@ -59,6 +61,7 @@ public class ExtremeDMC extends JavaPlugin {
             this.getServer().getPluginManager().registerEvents(new JoinLeaveEvents(), this);
             getCommand("edmc").setExecutor(new MainCommand());
             getCommand("discord").setExecutor(new DiscordCommand());
+            Config.checkValuesForConfigs();
             m = new Metrics(this);
 
 
@@ -72,7 +75,8 @@ public class ExtremeDMC extends JavaPlugin {
                                 .addEventListener(new ReactionListener())
                                 .addEventListener(new CommandManager())
                                 .addEventListener(new FullStartupEvent())
-                                .addEventListener(new JoinLeaveEvents())
+                                .addEventListener(new DiscordJoinLeaveEvents())
+                                .addEventListener(new DiscordBanEvent())
                                 .buildAsync();
                     } catch (LoginException e) {
                         log.severe("ExtremeDMC couldn't login into a bot account. Make sure the token you've inserted is correct!");
@@ -191,5 +195,24 @@ public class ExtremeDMC extends JavaPlugin {
         } catch (IndexOutOfBoundsException ex) {
             log.warning("No main guild able to be detected! Please make sure your bot is in a guild!");
         }
+    }
+
+    public Role getVerifyRole() {
+        if (mainGuild.getRolesByName("Unverified", true).isEmpty()) {
+            return mainGuild.getController().createRole().setHoisted(false).setName("Unverified").setMentionable(false).setPermissions(Long.valueOf(66560)).complete();
+        } else {
+            return mainGuild.getRolesByName("Unverified", true).get(0);
+        }
+    }
+
+    public void setUnverifiedPerms() {
+        try {
+            for (TextChannel tc : mainGuild.getTextChannels()) {
+                tc.createPermissionOverride(getVerifyRole()).setAllow(66560L).setDeny(2146892031).queue();
+            }
+        } catch (IllegalStateException ignored) {
+
+        }
+
     }
 }

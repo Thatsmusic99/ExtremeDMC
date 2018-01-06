@@ -13,11 +13,13 @@ public class PlayerBanEvent {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         if (e.getPlayer().isBanned()) {
-            if (Config.hasDiscord(e.getPlayer())) {
-                if (ExtremeDMC.instance.mainGuild.getMember(Config.getDiscord(e.getPlayer())) != null) {
-                    for (BanEntry b : Bukkit.getBanList(BanList.Type.NAME).getBanEntries()) {
-                        if (b.getTarget().equalsIgnoreCase(e.getPlayer().getName())) {
-                            ExtremeDMC.instance.mainGuild.getController().ban(Config.getDiscord(e.getPlayer()), 7, b.getReason()).queue();
+            if (ExtremeDMC.instance.getConfig().getBoolean("ban-linked-accounts")) {
+                if (Config.hasDiscord(e.getPlayer())) {
+                    if (ExtremeDMC.instance.mainGuild.getMember(Config.getDiscord(e.getPlayer())) != null) {
+                        for (BanEntry b : Bukkit.getBanList(BanList.Type.NAME).getBanEntries()) {
+                            if (b.getTarget().equalsIgnoreCase(e.getPlayer().getName())) {
+                                ExtremeDMC.instance.mainGuild.getController().ban(Config.getDiscord(e.getPlayer()), 7, b.getReason()).queue();
+                            }
                         }
                     }
                 }

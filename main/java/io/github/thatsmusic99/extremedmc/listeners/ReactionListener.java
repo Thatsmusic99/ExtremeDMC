@@ -30,6 +30,11 @@ public class ReactionListener extends ListenerAdapter {
                                 }
                             }
                             LinkCommand.pu.remove(e.getUser());
+                            if (ExtremeDMC.instance.getConfig().getBoolean("verify")) {
+                                if (ExtremeDMC.instance.mainGuild.getMember(e.getUser()).getRoles().contains(ExtremeDMC.instance.getVerifyRole())) {
+                                    ExtremeDMC.instance.mainGuild.getController().removeRolesFromMember(ExtremeDMC.instance.mainGuild.getMember(e.getUser()), ExtremeDMC.instance.getVerifyRole()).queue();
+                                }
+                            }
 
                         }
                     } else if (e.getReaction().getReactionEmote().getName().equals("\u274E")) {

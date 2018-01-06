@@ -2,36 +2,12 @@ package io.github.thatsmusic99.extremedmc.listeners;
 
 import io.github.thatsmusic99.extremedmc.ExtremeDMC;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
-import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class JoinLeaveEvents extends ListenerAdapter implements Listener {
-
-    @Override
-    public void onGuildMemberJoin(GuildMemberJoinEvent e) {
-        if (ExtremeDMC.instance.getConfig().getBoolean("join-leave")) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage("[" + ChatColor.DARK_AQUA + "Discord" + ChatColor.RESET + "] " + ChatColor.AQUA + e.getMember().getEffectiveName() + " has joined the Discord server!");
-            }
-        }
-    }
-
-    @Override
-    public void onGuildMemberLeave(GuildMemberLeaveEvent e) {
-        if (ExtremeDMC.instance.getConfig().getBoolean("join-leave")) {
-            for (Player p : Bukkit.getOnlinePlayers()) {
-                p.sendMessage("[" + ChatColor.DARK_AQUA + "Discord" + ChatColor.RESET + "] " + ChatColor.AQUA + e.getUser().getName() + " has left the Discord server!");
-            }
-        }
-    }
+public class JoinLeaveEvents implements Listener {
 
     @EventHandler
     public void onMinecraftJoin(PlayerJoinEvent e) {

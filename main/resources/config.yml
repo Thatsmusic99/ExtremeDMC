@@ -60,3 +60,19 @@ gametype: DEFAULT
 # When a user joins the Discord server, it will broadcast a message in game.
 # This does not apply from Minecraft joins to broadcasting on Discord.
 join-leave: true
+
+# Group and role linking
+# This links groups with your Discord server's roles, so that if someone gains a role on the Discord, the group(s) linked to the role will be added to the linked player IG.
+# Vice versa is currently unavailable, but when fully functional will be released.
+# If this is disabled, you can still link groups and roles, but no role/group changes are made.
+roles-groups-link: false
+
+# Banning players that have been banned on the Discord server/vice versa
+# If a player has been banned on the Discord server, then they can be banned automatically IG if this is enabled.
+# If a user has been banned on the main MC server, their Discord account will be banned automatically if enabled.
+# Recommended for security purposes.
+ban-linked-accounts: true
+
+# DO NOT CHANGE THIS VALUE UNLESS YOU WANT THE PLUGIN TO COMPLETELY FREAK OUT AND HAVE A HEART ATTACK, AS WELL AS MOST LIKELY DIE.
+# I'M NOT EVEN LAUGHING.
+version: 0.1

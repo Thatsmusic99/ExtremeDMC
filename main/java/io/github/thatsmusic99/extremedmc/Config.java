@@ -7,7 +7,9 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +20,7 @@ public class Config {
 
     private static File dataF;
     private static File configF;
+    private static double version = 0.1;
 
     public static boolean hasDiscord(Player p) {
         try {
@@ -121,6 +124,46 @@ public class Config {
             }
         }
         return false;
+    }
+
+    public static boolean isGroupAlreadyLinked(String s, Role r) {
+        return ExtremeDMC.data.getStringList("groups." + r.getId() + ".links").contains(s);
+    }
+
+    public static void checkValuesForConfigs() {
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        File configF = new File(ExtremeDMC.instance.getDataFolder(), "config.yml");
+        try {
+            if (ExtremeDMC.instance.getConfig().getDouble("version") == 0.0) {
+                fw = new FileWriter(configF, true);
+                bw = new BufferedWriter(fw);
+                bw.write("\n\n# Banning players that have been banned on the Discord server/vice versa\n" +
+                        "# If a player has been banned on the Discord server, then they can be banned automatically IG if this is enabled.\n" +
+                        "# If a user has been banned on the main MC server, their Discord account will be banned automatically if enabled.\n" +
+                        "# Recommended for security purposes.\n" +
+                        "ban-linked-accounts: true\n" +
+                        "\n" +
+                        "# DO NOT CHANGE THIS VALUE UNLESS YOU WANT THE PLUGIN TO COMPLETELY FREAK OUT AND HAVE A HEART ATTACK, AS WELL AS MOST LIKELY DIE.\n" +
+                        "# I'M NOT EVEN LAUGHING.\n" +
+                        "version: 0.1");
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (bw != null) {
+                    bw.close();
+                }
+                if (fw != null) {
+                    fw.close();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        ExtremeDMC.config = YamlConfiguration.loadConfiguration(configF);
+
     }
 
 
