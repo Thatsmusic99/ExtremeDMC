@@ -40,11 +40,9 @@ public class CommandManager extends ListenerAdapter {
         if (content.startsWith(ExtremeDMC.config.getString("prefix"))) {
             if (content.startsWith(ExtremeDMC.config.getString("prefix") + "list")) {
                 return true;
-            }
-            if (content.startsWith(ExtremeDMC.config.getString("prefix") + "whois")) {
+            } else if (content.startsWith(ExtremeDMC.config.getString("prefix") + "whois")) {
                 return true;
-            }
-            if (content.equalsIgnoreCase(ExtremeDMC.config.getString("prefix") + "link")) {
+            } else if (content.equalsIgnoreCase(ExtremeDMC.config.getString("prefix") + "link")) {
                 return true;
             }
             return false;

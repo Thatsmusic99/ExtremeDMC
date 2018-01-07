@@ -97,11 +97,11 @@ public class Config {
     }
 
     public static void createGroup(Role r, String s) {
-        ExtremeDMC.data.addDefault("groups." + r.getId() + ".staff", false);
-        if (ExtremeDMC.data.getStringList("groups." + r.getId() + ".links") != null) {
-            ExtremeDMC.data.addDefault("groups." + r.getId() + ".links", new ArrayList<>(Collections.singleton(s)));
+        ExtremeDMC.data.addDefault("groups." + r.getId().trim() + ".staff", false);
+        if (ExtremeDMC.data.getStringList("groups." + r.getId().trim() + ".links") != null) {
+            ExtremeDMC.data.addDefault("groups." + r.getId().trim() + ".links", new ArrayList<>(Collections.singleton(s)));
         } else {
-            List<String> l = ExtremeDMC.data.getStringList("groups." + r.getId() + ".links");
+            List<String> l = ExtremeDMC.data.getStringList("groups." + r.getId().trim() + ".links");
             l.add(s);
             ExtremeDMC.data.set("groups." + r.getId() + ".links", l);
         }

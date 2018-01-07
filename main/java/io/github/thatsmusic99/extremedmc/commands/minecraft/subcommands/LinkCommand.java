@@ -26,8 +26,17 @@ public class LinkCommand {
                     if (!Config.isPlayer(ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).get(0).getUser())) {
                         if (ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).size() > 1) {
                             if (ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true).size() > 8) {
+
+                                HashMap<String, PagedLists> t = new HashMap<>();
                                 PagedLists pl = new PagedLists(ExtremeDMC.instance.mainGuild.getMembersByEffectiveName(name, true), 8);
-                                PageSwitch.sections.put(p, "playerlink");
+                                t.put("playerlink", pl);
+                                PageSwitch.sections.put(p, t);
+
+                                p.sendMessage(ChatColor.DARK_AQUA
+                                        + ""
+                                        + ChatColor.BOLD
+                                        + "Multiple names were found when searching by name, please click one of the following (use /edmc page <#> to switch pages:");
+
                                 for (Object o : pl.getContentsInPage(1)) {
                                     Member u = (Member) o;
                                     StringBuilder sb = new StringBuilder();

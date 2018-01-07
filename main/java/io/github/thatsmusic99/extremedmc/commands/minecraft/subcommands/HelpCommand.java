@@ -27,4 +27,23 @@ public class HelpCommand {
             }
         }
     }
+
+    public static void help(CommandSender cs, int page) {
+        List<PermissionEnums> perms = new ArrayList<>();
+        for (PermissionEnums key : PermissionEnums.values()) {
+            if (cs.hasPermission(key.p)) {
+                perms.add(key);
+            }
+        }
+        PagedLists pl = new PagedLists(perms, 8);
+        cs.sendMessage(ChatColor.DARK_AQUA + "===============" + ChatColor.WHITE + ChatColor.BOLD + " [ " + ChatColor.AQUA + ChatColor.BOLD + "EXTREMEDMC" + ChatColor.WHITE + ChatColor.BOLD + " ] " + ChatColor.AQUA + page + "/" + String.valueOf(pl.getTotalPages()) + " " + ChatColor.DARK_AQUA + "===============");
+        int TimesSent = 0;
+        for (Object key : pl.getContentsInPage(page)) {
+            if (TimesSent <= 7) {
+                PermissionEnums key2 = (PermissionEnums) key;
+                cs.sendMessage(ChatColor.AQUA + key2.c + ChatColor.GRAY + " - " + ChatColor.DARK_AQUA + key2.d);
+                TimesSent++;
+            }
+        }
+    }
 }

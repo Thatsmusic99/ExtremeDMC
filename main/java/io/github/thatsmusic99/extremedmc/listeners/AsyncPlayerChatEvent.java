@@ -1,7 +1,10 @@
 package io.github.thatsmusic99.extremedmc.listeners;
 
 import io.github.thatsmusic99.extremedmc.ExtremeDMC;
+import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.StaffChatCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -13,19 +16,47 @@ public class AsyncPlayerChatEvent implements Listener {
     private static boolean bold = false;
     private static boolean strike = false;
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChat(org.bukkit.event.player.AsyncPlayerChatEvent e) {
-        String m = e.getMessage();
-        m = format(m);
-        ExtremeDMC.jda.getGuilds().get(0)
-                .getTextChannelsByName(config.getString("text-channel"), true)
-                .get(0)
-                .sendMessage(ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', config.getString("message-format").replaceAll("%w", e.getPlayer().getWorld().getName())
-                        .replaceAll("%p", ExtremeDMC.chat.getPlayerPrefix(e.getPlayer()))
-                        .replaceAll("%u", e.getPlayer().getName())
-                        .replaceAll("%m", m)
-                        .replaceAll("§", ""))))
-        .queue();
+        if (!ExtremeDMC.instance.getConfig().getString("text-channel").equals("INSERT-TEXT-CHANNEL")) {
+            if (!StaffChatCommand.staff.contains(e.getPlayer())) {
+                String m = e.getMessage();
+                m = format(m);
+                ExtremeDMC.instance.mainGuild
+                        .getTextChannelsByName(config.getString("text-channel"), true)
+                        .get(0)
+                        .sendMessage(ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', config.getString("message-format").replaceAll("%w", e.getPlayer().getWorld().getName())
+                                .replaceAll("%p", ExtremeDMC.chat.getPlayerPrefix(e.getPlayer()))
+                                .replaceAll("%u", e.getPlayer().getName())
+                                .replaceAll("%m", m)
+                                .replaceAll("§", ""))))
+                        .queue();
+            } else {
+                if (!ExtremeDMC.instance.getConfig().getString("staff-channel").equals("INSERT-TEXT-CHANNEL")) {
+                    String text = ExtremeDMC.instance.getConfig().getString("staff-channel");
+                    if (!text.isEmpty()) {
+                        e.setCancelled(true);
+                        String m = e.getMessage();
+                        m = format(m);
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                            if (StaffChatCommand.staff.contains(p)) {
+                                p.sendMessage("[" + ChatColor.DARK_AQUA + "EDMC Staff chat (MC)" + ChatColor.WHITE + "] " + ChatColor.AQUA + e.getPlayer().getName() + ChatColor.WHITE + " > " + ChatColor.AQUA + m);
+                            }
+                        }
+                        ExtremeDMC.instance.mainGuild
+                                .getTextChannelsByName(text, true)
+                                .get(0)
+                                .sendMessage(ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', config.getString("message-format").replaceAll("%w", e.getPlayer().getWorld().getName())
+                                        .replaceAll("%p", ExtremeDMC.chat.getPlayerPrefix(e.getPlayer()))
+                                        .replaceAll("%u", e.getPlayer().getName())
+                                        .replaceAll("%m", m)
+                                        .replaceAll("§", ""))))
+                                .queue();
+                    }
+                }
+            }
+
+        }
     }
     private static String bold(String msg) {
         boolean t = false;
