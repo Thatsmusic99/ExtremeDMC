@@ -31,7 +31,7 @@ public class Config {
         }
     }
 
-    public static UserAccount create(Player p, User u) {
+    public static UserAccount create(OfflinePlayer p, User u) {
         ExtremeDMC.data.addDefault("data." + p.getUniqueId().toString() + ".discordid", u.getId());
         ExtremeDMC.data.addDefault("data." + p.getUniqueId().toString() + ".discordname", u.getName() + "#" + u.getDiscriminator());
         ExtremeDMC.data.addDefault("data." + p.getUniqueId().toString() + ".playername", p.getName());

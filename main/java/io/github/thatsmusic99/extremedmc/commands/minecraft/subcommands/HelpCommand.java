@@ -1,5 +1,6 @@
 package io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands;
 
+import io.github.thatsmusic99.extremedmc.ExtremeDMC;
 import io.github.thatsmusic99.extremedmc.utils.PagedLists;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -22,8 +23,10 @@ public class HelpCommand {
         for (Object key : pl.getContentsInPage(1)) {
             if (TimesSent <= 7) {
                 PermissionEnums key2 = (PermissionEnums) key;
-                cs.sendMessage(ChatColor.AQUA + key2.c + ChatColor.GRAY + " - " + ChatColor.DARK_AQUA + key2.d);
-                TimesSent++;
+                if (!(ExtremeDMC.getDiscordSRV() && key2.ds)) {
+                    cs.sendMessage(ChatColor.AQUA + key2.c + ChatColor.GRAY + " - " + ChatColor.DARK_AQUA + key2.d);
+                    TimesSent++;
+                }
             }
         }
     }
@@ -41,8 +44,10 @@ public class HelpCommand {
         for (Object key : pl.getContentsInPage(page)) {
             if (TimesSent <= 7) {
                 PermissionEnums key2 = (PermissionEnums) key;
-                cs.sendMessage(ChatColor.AQUA + key2.c + ChatColor.GRAY + " - " + ChatColor.DARK_AQUA + key2.d);
-                TimesSent++;
+                if (!(ExtremeDMC.getDiscordSRV() && key2.ds)) {
+                    cs.sendMessage(ChatColor.AQUA + key2.c + ChatColor.GRAY + " - " + ChatColor.DARK_AQUA + key2.d);
+                    TimesSent++;
+                }
             }
         }
     }
