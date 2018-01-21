@@ -2,7 +2,9 @@ package io.github.thatsmusic99.extremedmc;
 
 import com.google.common.io.ByteStreams;
 
+import github.scarsz.discordsrv.DiscordSRV;
 import io.github.thatsmusic99.extremedmc.commands.discord.CommandManager;
+import io.github.thatsmusic99.extremedmc.commands.discord.subcommands.AwaitSubcommand;
 import io.github.thatsmusic99.extremedmc.commands.minecraft.DiscordCommand;
 import io.github.thatsmusic99.extremedmc.commands.minecraft.MainCommand;
 import io.github.thatsmusic99.extremedmc.listeners.*;
@@ -15,7 +17,6 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -49,6 +50,8 @@ public class ExtremeDMC extends JavaPlugin {
     public Guild mainGuild = null;
     public static Metrics m;
 
+    // TODO tab manager
+
     @Override
     public void onEnable() {
         try {
@@ -59,30 +62,36 @@ public class ExtremeDMC extends JavaPlugin {
             createConfig();
             this.getServer().getPluginManager().registerEvents(new AsyncPlayerChatEvent(), this);
             this.getServer().getPluginManager().registerEvents(new JoinLeaveEvents(), this);
+            this.getServer().getPluginManager().registerEvents(new PlayerBanEvent(), this);
             getCommand("edmc").setExecutor(new MainCommand());
-            getCommand("discord").setExecutor(new DiscordCommand());
+            if (!getDiscordSRV()) {
+                getCommand("discord").setExecutor(new DiscordCommand());
+            }
             Config.checkValuesForConfigs();
+
             m = new Metrics(this);
 
 
             log.info("ExtremeDMC has successfully set itself up, logging into bot account once the server is set up!");
+            if (getDiscordSRV()) {
+                getLogger().info("Found DiscordSRV, will log into plugin's bot account.");
+            }
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     try {
-                        jda = new JDABuilder(AccountType.BOT).setToken(config.getString("bot-token"))
+                        jda = new JDABuilder(AccountType.BOT).setToken(getDiscordSRV() ? getDSRVAPI().getConfig().getString("BotToken") : config.getString("bot-token"))
                                 .addEventListener(new DiscordMessageEvent())
                                 .addEventListener(new ReactionListener())
                                 .addEventListener(new CommandManager())
                                 .addEventListener(new FullStartupEvent())
                                 .addEventListener(new DiscordJoinLeaveEvents())
                                 .addEventListener(new DiscordBanEvent())
+                                .addEventListener(new AwaitSubcommand())
+                                .addEventListener(new DiscordBanEvent())
                                 .buildAsync();
                     } catch (LoginException e) {
                         log.severe("ExtremeDMC couldn't login into a bot account. Make sure the token you've inserted is correct!");
-                        return;
-                    } catch (RateLimitedException e) {
-                        e.printStackTrace();
                         return;
                     }
                     log.info("ExtremeDMC has successfully logged into a bot account!");
@@ -104,6 +113,10 @@ public class ExtremeDMC extends JavaPlugin {
 
                 }
             }.runTaskAsynchronously(this);
+            m.addCustomChart(new Metrics.SingleLineChart("users_managed", () -> (jda.getUsers().size() % 2 == 0 ? jda.getUsers().size() / 2 : jda.getUsers().size())));
+            m.addCustomChart(new Metrics.SingleLineChart("tcs_managed", () -> (jda.getTextChannels().size() % 2 == 0 ? jda.getTextChannels().size() / 2 : jda.getUsers().size())));
+            m.addCustomChart(new Metrics.SingleLineChart("roles_managed", () -> (jda.getRoles().size() % 2 == 0 ? jda.getRoles().size() / 2 : jda.getRoles().size())));
+            m.addCustomChart(new Metrics.SingleLineChart("accounts_linked", () -> data.getConfigurationSection("data").getKeys(false).size()));
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -112,7 +125,7 @@ public class ExtremeDMC extends JavaPlugin {
     }
 
 
-    private void createConfig() throws IOException {
+    public void createConfig() throws IOException {
         config = YamlConfiguration.loadConfiguration(loadResource(this, "config.yml"));
         data = YamlConfiguration.loadConfiguration(loadResource(this, "data.yml"));
         messages = YamlConfiguration.loadConfiguration(loadResource(this, "messages.yml"));
@@ -134,14 +147,6 @@ public class ExtremeDMC extends JavaPlugin {
             e.printStackTrace();
         }
         return resourceFile;
-    }
-    @Override
-    public void onDisable() {
-        try {
-            jda.shutdownNow();
-        } catch (NullPointerException ex) {
-            //
-        }
     }
 
     private boolean setupChat() {
@@ -215,4 +220,13 @@ public class ExtremeDMC extends JavaPlugin {
         }
 
     }
+
+    public static boolean getDiscordSRV() {
+        return instance.getServer().getPluginManager().isPluginEnabled("DiscordSRV") && config.getBoolean("discordsrv");
+    }
+
+    public DiscordSRV getDSRVAPI() {
+        return DiscordSRV.getPlugin();
+    }
+
 }

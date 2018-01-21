@@ -25,6 +25,9 @@ message-format: '[%w] %p %u > %m'
 # Message sent from text channel if message-transfer is true
 d-message-format: '&f[&3&oDiscord&f] %u &7> &b%m'
 
+# Message sent from staff channel if enabled
+staff-d-message-format: '&f[&3Discord  &bSTAFF&f] %u &7> &b%m
+
 # Online status
 # Valid inputs: ONLINE, IDLE, DO_NOT_DISTURB, INVISIBLE
 online-status: ONLINE
@@ -72,6 +75,11 @@ roles-groups-link: false
 # If a user has been banned on the main MC server, their Discord account will be banned automatically if enabled.
 # Recommended for security purposes.
 ban-linked-accounts: true
+
+# DiscordSRV compatibility
+# Allows the plugin to take config values from DiscordSRV to run.
+# This will only allow DiscordSRV to transfer messages if enabled and remove any interfering commands.
+discordsrv: true
 
 # DO NOT CHANGE THIS VALUE UNLESS YOU WANT THE PLUGIN TO COMPLETELY FREAK OUT AND HAVE A HEART ATTACK, AS WELL AS MOST LIKELY DIE.
 # I'M NOT EVEN LAUGHING.

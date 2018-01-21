@@ -13,7 +13,7 @@ import java.util.List;
 
 public class LinkGroupCommand {
 
-    public static void linkGroup(String g, String n, CommandSender p) {
+    public static void linkGroup(String g, String n, CommandSender p) { // TODO test
         if (p.hasPermission("edmc.command.linkgroup")) {
             if (Arrays.asList(ExtremeDMC.perms.getGroups()).contains(g)) {
                 if (n.matches("^[0-9]+$")) {
@@ -28,14 +28,14 @@ public class LinkGroupCommand {
                     if (ExtremeDMC.instance.mainGuild.getRolesByName(n, true) != null) {
                         List<Role> rs = ExtremeDMC.instance.mainGuild.getRolesByName(n, true);
                         if (rs.size() > 8) {
-                            p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "More than one role was found, ");
+                            p.sendMessage(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "More than one role was found, please click one of the following (use ");
                             PagedLists pl = new PagedLists(rs, 8);
                             for (Object key : pl.getContentsInPage(1)) {
                                 Role r = (Role) key;
                                 FancyMessage fc = new FancyMessage()
                                         .color(ChatColor.AQUA)
                                         .text((ChatColor.AQUA + r.getName() + "-  Color (RGB): " + r.getColor().getRGB()))
-                                        .command("/edmc glink " + r.getId());
+                                        .command("/edmc glink " + g + " " + r.getId());
                                 fc.send(p);
                             }
                         } else if (rs.size() > 1) {
@@ -43,7 +43,7 @@ public class LinkGroupCommand {
                                 FancyMessage fc = new FancyMessage()
                                         .color(ChatColor.AQUA)
                                         .text((ChatColor.AQUA + r.getName() + "-  Color (RGB): " + r.getColor().getRGB()))
-                                        .command("/edmc glink " + r.getId());
+                                        .command("/edmc glink " + g + " " + r.getId());
                                 fc.send(p);
                             }
                         } else {

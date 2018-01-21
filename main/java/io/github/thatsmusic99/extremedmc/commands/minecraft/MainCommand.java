@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 
 public class MainCommand implements CommandExecutor {
 
+    // TODO add command where staff are able to end link cooldowns
+    // TODO exception messages
+
     @Override
     public boolean onCommand(CommandSender cs, Command c, String s, String[] args) {
         if (c.getName().equalsIgnoreCase("edmc")) {

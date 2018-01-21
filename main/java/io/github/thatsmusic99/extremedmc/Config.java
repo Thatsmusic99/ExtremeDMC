@@ -3,6 +3,7 @@ package io.github.thatsmusic99.extremedmc;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ public class Config {
     private static File configF;
     private static double version = 0.1;
 
-    public static boolean hasDiscord(Player p) {
+    public static boolean hasDiscord(OfflinePlayer p) {
         try {
             return ExtremeDMC.data.getConfigurationSection("data").getConfigurationSection(p.getUniqueId().toString()).getString("discordid") != null;
         } catch (NullPointerException e) {
@@ -38,7 +39,7 @@ public class Config {
         saveData();
         return new UserAccount(u, p);
     }
-    public static void remove(Player p) {
+    public static void remove(OfflinePlayer p) {
         ExtremeDMC.data.set("data." + p.getUniqueId().toString(), null);
         ExtremeDMC.data.options().copyDefaults(true);
         saveData();
@@ -60,12 +61,22 @@ public class Config {
     public static void reloadConfig() {
         if (configF == null) {
             configF = new File(ExtremeDMC.instance.getDataFolder(), "config.yml");
+            try {
+                ExtremeDMC.instance.createConfig();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         ExtremeDMC.config = YamlConfiguration.loadConfiguration(configF);
     }
     public static void reloadData() {
         if (dataF == null) {
             dataF = new File(ExtremeDMC.instance.getDataFolder(), "data.yml");
+            try {
+                dataF.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         ExtremeDMC.data = YamlConfiguration.loadConfiguration(dataF);
     }
@@ -81,24 +92,27 @@ public class Config {
             e.printStackTrace();
         }
     }
-    public static User getDiscord(Player p) {
+    public static User getDiscord(OfflinePlayer p) {
         return ExtremeDMC.jda.getUserById(ExtremeDMC.data.getConfigurationSection("data." + p.getUniqueId().toString()).getString(".discordid"));
     }
 
-    public static Player getPlayer(User u) {
+    public static OfflinePlayer getPlayer(User u) {
         for (String s : ExtremeDMC.data.getConfigurationSection("data").getKeys(true)) {
             ConfigurationSection cs = ExtremeDMC.data.getConfigurationSection("data").getConfigurationSection(s);
-            if (cs.getString("discordid").equals(u.getId())) {
-                return Bukkit.getPlayer(UUID.fromString(cs.getName()));
+            try {
+                if (cs.getString("discordid").equals(u.getId())) {
+                    return Bukkit.getOfflinePlayer(UUID.fromString(cs.getName()));
+                }
+            } catch (NullPointerException ex) {
+                break;
             }
-
         }
         return null;
     }
 
     public static void createGroup(Role r, String s) {
         ExtremeDMC.data.addDefault("groups." + r.getId().trim() + ".staff", false);
-        if (ExtremeDMC.data.getStringList("groups." + r.getId().trim() + ".links") != null) {
+        if (ExtremeDMC.data.getStringList("groups." + r.getId().trim() + ".links") == null) {
             ExtremeDMC.data.addDefault("groups." + r.getId().trim() + ".links", new ArrayList<>(Collections.singleton(s)));
         } else {
             List<String> l = ExtremeDMC.data.getStringList("groups." + r.getId().trim() + ".links");
@@ -115,6 +129,10 @@ public class Config {
         } else {
             return false;
         }
+    }
+
+    public static List<String> getLinkedGroups(Role r) {
+        return ExtremeDMC.data.getStringList("groups." + r.getId() + ".links");
     }
 
     public static boolean isGroupLinked(String s) {

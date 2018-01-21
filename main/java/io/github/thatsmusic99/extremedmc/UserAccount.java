@@ -2,14 +2,15 @@ package io.github.thatsmusic99.extremedmc;
 
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 public class UserAccount {
 
     private User u;
-    private Player p;
+    private OfflinePlayer p;
 
-    public UserAccount(User u, Player p) {
+    public UserAccount(User u, OfflinePlayer p) {
         this.u = u;
         this.p = p;
     }
@@ -19,7 +20,7 @@ public class UserAccount {
     public Member getDiscordMember() {
         return this.u.getMutualGuilds().get(0).getMember(getDiscordUser());
     }
-    public Player getPlayer() {
+    public OfflinePlayer getPlayer() {
         return this.p;
     }
     public boolean isOnlineMC() {
@@ -35,7 +36,7 @@ public class UserAccount {
         return this.u.getMutualGuilds().get(0).getMember(getDiscordUser()).getVoiceState().inVoiceChannel();
     }
     public boolean isStaff() {
-        return this.p.hasPermission("extremedmc.staff");
+        return this.getPlayer().getPlayer().hasPermission("extremedmc.staff");
     }
 
 

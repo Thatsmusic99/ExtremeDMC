@@ -1,9 +1,12 @@
 package io.github.thatsmusic99.extremedmc.listeners;
 
 import io.github.thatsmusic99.extremedmc.ExtremeDMC;
+import io.github.thatsmusic99.extremedmc.commands.discord.subcommands.AwaitSubcommand;
+import io.github.thatsmusic99.extremedmc.commands.minecraft.subcommands.StaffChatCommand;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import static io.github.thatsmusic99.extremedmc.ExtremeDMC.config;
@@ -15,17 +18,31 @@ public class DiscordMessageEvent extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
-        // if not valid command
+        // TODO check if either command or prefix
+        if (!AwaitSubcommand.sections.containsKey(e.getAuthor())) {
 
             if (e.getChannel().getName().equalsIgnoreCase(config.getString("text-channel"))) {
-                if (e.getAuthor() != ExtremeDMC.jda.getSelfUser()) {
-                    for (Player p : ExtremeDMC.instance.getServer().getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', ExtremeDMC.config.getString("d-message-format")
-                                .replaceAll("%u", e.getMember().getEffectiveName())
-                                .replaceAll("%m", format(e.getMessage().getContentDisplay()))));
+                if (!ExtremeDMC.getDiscordSRV()) {
+                    if (e.getAuthor() != ExtremeDMC.jda.getSelfUser()) {
+                        for (Player p : ExtremeDMC.instance.getServer().getOnlinePlayers()) {
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', ExtremeDMC.config.getString("d-message-format")
+                                    .replaceAll("%u", e.getMember().getEffectiveName())
+                                    .replaceAll("%m", format(e.getMessage().getContentDisplay()))));
+                        }
+                    }
+                } else if (e.getTextChannel().getName().equalsIgnoreCase(config.getString("staff-channel"))) {
+                    if (e.getAuthor() != ExtremeDMC.jda.getSelfUser()) {
+                        for (CommandSender p : StaffChatCommand.staff) {
+                            p.sendMessage(ChatColor.translateAlternateColorCodes('&', ExtremeDMC.config.getString("staff-d-message-format")
+                                    .replaceAll("%u", e.getMember().getEffectiveName())
+                                    .replaceAll("%m", format(e.getMessage().getContentDisplay()))));
+                        }
                     }
                 }
             }
+            // TODO check if in staff channel
+
+        }
     }
 
     private static String format(String m) {

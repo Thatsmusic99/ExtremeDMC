@@ -19,6 +19,8 @@ public class LinkCommand {
     public static HashMap<User, Player> pu = new HashMap<>();
     public static HashMap<User, Player> up = new HashMap<>();
 
+
+    // TODO test name > 8
     public static void linkSelfName(Player p, String name) {
         if (p.hasPermission("edmc.command.link")) {
             if (!Config.hasDiscord(p)) {

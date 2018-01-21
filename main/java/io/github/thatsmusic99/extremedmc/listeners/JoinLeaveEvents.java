@@ -9,6 +9,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class JoinLeaveEvents implements Listener {
 
+    // TODO Include vanish permissions
+
     @EventHandler
     public void onMinecraftJoin(PlayerJoinEvent e) {
         if (!ExtremeDMC.instance.getConfig().getString("text-channel").equals("INSERT-TEXT-CHANNEL")) {

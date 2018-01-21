@@ -9,7 +9,6 @@ import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -18,6 +17,7 @@ import javax.security.auth.login.LoginException;
 
 public class ReloadCommand {
 
+    // TODO test
     public static void reload(CommandSender p) {
         try {
             Config.reloadConfig();
@@ -33,9 +33,6 @@ public class ReloadCommand {
                     ExtremeDMC.instance.log.severe("ExtremeDMC couldn't login into a bot account. Make sure the token you've inserted is correct!");
                     p.sendMessage(ChatColor.RED + "The config was reloaded, but ExtremeDMC couldn't log into a bot account. Make sure the token you've inserted is correct!");
                     return;
-                } catch (RateLimitedException ex) {
-                    ex.printStackTrace();
-                    return;
                 }
                 ExtremeDMC.instance.log.info("ExtremeDMC has successfully logged into a bot account!");
                 ExtremeDMC.jda.getPresence().setStatus(OnlineStatus.valueOf(ExtremeDMC.config.getString("online-status")));
@@ -48,7 +45,7 @@ public class ReloadCommand {
                 } else {
                     ExtremeDMC.instance.log.warning("Java 8 not detected, cannot set playing status!");
                 }
-                ExtremeDMC.instance.setupMainGuild();
+               // ExtremeDMC.instance.setupMainGuild();
             }
             p.sendMessage(ChatColor.AQUA + "Config has been reloaded!");
         } catch (Exception e) {
